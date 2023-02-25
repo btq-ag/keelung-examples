@@ -40,6 +40,12 @@ calculator = do
       (x + y)
       (x * y)
 
+-- | A program that requests for 10 inputs and returns the 4th input
+fourthInput :: Comp Field
+fourthInput = do
+  xs <- inputList Public 10          -- ask for 10 inputs 
+  return (xs !! 3)
+
 -- | A program that asserts all 10 inputs to be 42
 allBe42 :: Comp ()
 allBe42 = do
