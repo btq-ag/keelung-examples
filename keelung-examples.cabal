@@ -25,6 +25,9 @@ source-repository head
 
 library
   exposed-modules:
+      ECC
+      MerkleTree
+      Semaphore
       Tutorial
   other-modules:
       Paths_keelung_examples
@@ -34,4 +37,5 @@ library
   build-depends:
       base >=4.7 && <5
     , keelung
+    , keelung-stdlib
   default-language: Haskell2010

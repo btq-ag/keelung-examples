@@ -16,26 +16,26 @@ packages:
     commit: d7d0da6b5df8045afdfb820ba8d08f34dc4c3e58
     git: https://github.com/btq-ag/galois-field.git
 - completed:
-    commit: ea2ada19e486b3900b9b200469fc8c4c2b245753
+    commit: 762ec814ec25c7911abfe0b2b48378f8c453438c
     git: https://github.com/btq-ag/keelung.git
     name: keelung
     pantry-tree:
-      sha256: 61f6695d712a7ab06008d941ba6efcf3de35a429c1bdfe2c777b181c9bfa6d33
+      sha256: 0a688e54cf48eaaa66053e9ae174c87a5ed670d38833a6b9bec27dbb0c40cd0d
       size: 1570
-    version: 0.9.0.0
+    version: 0.9.1.0
   original:
-    commit: ea2ada19e486b3900b9b200469fc8c4c2b245753
+    commit: 762ec814ec25c7911abfe0b2b48378f8c453438c
     git: https://github.com/btq-ag/keelung.git
 - completed:
-    commit: 3fbed0ddebc3bc5ae4b6357776e526097f79caac
+    commit: c0e0d254b3b5afe8270a8e31664c7206070380a4
     git: https://github.com/btq-ag/keelung-stdlib.git
     name: keelung-stdlib
     pantry-tree:
-      sha256: 296a346c0d910a54a650f09e9a13f31a9f7948aa3fd788ff2634214eff9c7717
-      size: 2217
+      sha256: 2965478ba7960a5674e7ea411db9af9b6878ae9c4383a7d6ce7a1f4c4098e9a0
+      size: 1914
     version: 0.1.0.0
   original:
-    commit: 3fbed0ddebc3bc5ae4b6357776e526097f79caac
+    commit: c0e0d254b3b5afe8270a8e31664c7206070380a4
     git: https://github.com/btq-ag/keelung-stdlib.git
 snapshots:
 - completed:
