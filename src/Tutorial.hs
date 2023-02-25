@@ -43,14 +43,18 @@ calculator = do
 -- | A program that asserts all 10 inputs to be 42
 allBe42 :: Comp ()
 allBe42 = do
-  xs <- inputList Private 10
-  y <- inputField Private
-  forM_ xs $ \x -> assert (x `eq` y)
+  xs <- inputList Public 10 :: Comp [Field]
+  -- access elements of `xs` with indices from 0 to 9
+  forM_ [0 .. 9] $ \i -> do
+    assert (xs !! i `eq` 42)
+  -- access elements of `xs` directly
+  forM_ xs $ \x -> do
+    assert (x `eq` 42)
 
 -- | A program that sums all the 10 inputs
 summation :: Comp Field
 summation = do
-  xs <- inputList Private 10
+  xs <- inputList Public 10
   return $ sum xs
 
 -- | Birthday voucher example
