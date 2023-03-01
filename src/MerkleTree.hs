@@ -28,7 +28,6 @@ getMerkleProof :: Field -> [[Field]] -> [Field] -> Comp Field
 getMerkleProof leaf siblings indices = do
   foldlM
     ( \_digest (_i, p) -> do
-        -- assert (digest `eq` choose p i)
         hash p >>= reuse
     )
     leaf
@@ -36,13 +35,6 @@ getMerkleProof leaf siblings indices = do
 
 getMerkleProof' :: Int -> Comp Field
 getMerkleProof' depth = do
-  leaf <- inputField Private
-  siblings <- inputList2 Private depth 5
-  indices <- inputList Private depth
-  getMerkleProof leaf siblings indices
-
-getMerkleProofA :: Int -> Comp Field
-getMerkleProofA depth = do
   leaf     <- inputField Private
   siblings <- inputList2 Private depth 2
   indices  <- inputList Private depth :: Comp [Field]
