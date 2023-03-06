@@ -53,10 +53,10 @@ genPoint n (Point ((a, b), x, y)) = do
         x2 = slope * slope - (x0 + x1)
         y2 = (x0 - x2) * slope - y1
     double :: Point -> Point
-    double (Point ((a, b), x, y))
-      | y == 0 = Point ((a, b), 0, 0)
-      | otherwise = Point ((a, b), x0, y0)
+    double (Point ((a', b'), x', y'))
+      | y == 0 = Point ((a', b'), 0, 0)
+      | otherwise = Point ((a', b'), x0, y0)
       where
-        slope = (x * x * 3 + a) / (y + y)
-        x0 = slope * slope - x - x
-        y0 = (x - x0) * slope - y
+        slope = (x * x * 3 + a') / (y' + y')
+        x0 = slope * slope - x' - x'
+        y0 = (x' - x0) * slope - y'
