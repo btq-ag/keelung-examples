@@ -30,7 +30,7 @@ resolver:
 #   - auto-update
 #   - wai
 packages:
-- .
+  - .
 # Dependency packages to be pulled from upstream that are not in the resolver.
 # These entries can reference officially published versions as well as
 # forks / in-progress versions pinned to a git hash. For example:
@@ -41,14 +41,13 @@ packages:
 #   commit: e7b331f14bcffb8367cd58fbfc8b40ec7642100a
 #
 extra-deps:
-- git: https://github.com/btq-ag/galois-field.git
-  commit: d7d0da6b5df8045afdfb820ba8d08f34dc4c3e58
-# - ../keelung
-- git: https://github.com/btq-ag/keelung.git
-  commit: 762ec814ec25c7911abfe0b2b48378f8c453438c
-- git: https://github.com/btq-ag/keelung-stdlib.git
-  commit: c0e0d254b3b5afe8270a8e31664c7206070380a4
-
+  - git: https://github.com/btq-ag/galois-field.git
+    commit: d7d0da6b5df8045afdfb820ba8d08f34dc4c3e58
+  # - ../keelung
+  - git: https://github.com/btq-ag/keelung.git
+    commit: cbadd4d09fe9d66a3111c1c398dafb129bb4421f
+  - git: https://github.com/btq-ag/keelung-stdlib.git
+    commit: 7757098b603c5d4c1f6b5ac4a191bd65b3c91b62
 # Override default flag values for local packages and extra-deps
 # flags: {}
 
