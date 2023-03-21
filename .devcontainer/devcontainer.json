@@ -7,9 +7,7 @@
         "ghcr.io/devcontainers/features/docker-in-docker:1": {
             "version": "latest",
             "moby": true
-        },
-        "ghcr.io/devcontainers-contrib/features/bash-command:1": {
-            "command": "stack build && docker run -i btqag/keelungc"
         }
-    }
+    },
+    "postAttachCommand": "stack build && docker run -i btqag/keelungc"
 }
