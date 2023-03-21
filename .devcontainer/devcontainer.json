@@ -8,5 +8,6 @@
             "version": "latest",
             "moby": true
         }
-    }
+    },
+    "updateContentCommand": "stack build && docker run -i btqag/keelungc"
 }
