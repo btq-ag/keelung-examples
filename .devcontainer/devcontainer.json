@@ -1,0 +1,12 @@
+{
+    "name": "my-project-devcontainer",
+    "image": "mcr.microsoft.com/devcontainers/base:ubuntu",  // Any generic, debian-based image.
+    "features": {
+        "ghcr.io/devcontainers-contrib/features/haskell:2": {
+            "installStack": true},
+        "ghcr.io/devcontainers/features/docker-in-docker:1": {
+            "version": "latest",
+            "moby": true
+        }
+    }
+}
