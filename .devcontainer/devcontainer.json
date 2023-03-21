@@ -9,5 +9,5 @@
             "moby": true
         }
     },
-    "updateContentCommand": "stack build && docker run -i btqag/keelungc"
+    "updateContentCommand": "stack build && docker run -i btqag/keelungc --version"
 }
