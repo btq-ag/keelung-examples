@@ -10,5 +10,6 @@
             "moby": true
         }
     },
-    "updateContentCommand": "stack build && docker run -i btqag/keelungc --version && docker pull btqag/aurora-prove && docker pull btqag/aurora-verify && code --install-extension haskell.haskell"
+    "updateContentCommand": "stack build && docker run -i btqag/keelungc --version && docker pull btqag/aurora-prove && docker pull btqag/aurora-verify",
+    "postStartCommand": "code --install-extension haskell.haskell"
 }
