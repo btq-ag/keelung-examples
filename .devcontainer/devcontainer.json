@@ -3,11 +3,12 @@
     "image": "mcr.microsoft.com/devcontainers/base:ubuntu",  // Any generic, debian-based image.
     "features": {
         "ghcr.io/devcontainers-contrib/features/haskell:2": {
+            "ghcVersion": "9.2.5",
             "installStack": true},
         "ghcr.io/devcontainers/features/docker-in-docker:1": {
             "version": "latest",
             "moby": true
         }
     },
-    "updateContentCommand": "stack build && docker run -i btqag/keelungc --version"
+    "updateContentCommand": "stack build && docker run -i btqag/keelungc --version && docker pull btqag/aurora-prove && docker pull btqag/aurora-verify && code --install-extension haskell.haskell"
 }
