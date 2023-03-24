@@ -88,3 +88,23 @@ reused = do
   x <- input Public
   y <- reuse $ x * x * x * x
   return [y, y]
+
+{- LISTS -}
+-- | A program that returns whatever list of length l is given.
+echoList :: Int -> Comp [Field] 
+echoList l = do
+  xs <- inputList Private l :: Comp [Field]
+  return xs
+
+-- | A program that returns the nth index of a list of length l.
+indexList :: Int -> Int -> Comp Field
+indexList l n = do
+  xs <- inputList Private l :: Comp [Field]
+  return (xs !! n)
+
+-- | A program that reverses the input list of length l.
+reverseList :: Int -> Comp [Field]
+reverseList l = do
+  xs <- inputList Private l :: Comp [Field]
+  return (reverse xs)
+  
