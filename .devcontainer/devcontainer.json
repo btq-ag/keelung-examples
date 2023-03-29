@@ -11,5 +11,12 @@
         }
     },
     "updateContentCommand": "stack build && docker run -i btqag/keelungc --version && docker pull btqag/aurora-prove && docker pull btqag/aurora-verify",
-    "postAttachCommand": "code --install-extension haskell.haskell"
+    "customizations": {
+		"vscode": {
+			"extensions": [
+				"justusadam.language-haskell",
+				"haskell.haskell"
+			]
+		}
+	}
 }
