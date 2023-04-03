@@ -107,3 +107,18 @@ reverseList :: Int -> Comp [Field]
 reverseList l = do
   xs <- inputList Private l :: Comp [Field]
   return (reverse xs)
+
+-- | Create a list using list comprehension
+listComprehension :: Integer -> Integer -> Comp [Field]
+listComprehension m n = do
+  let l = map fromInteger [m..n]
+  return l
+
+-- | Prove a person is older than a minimum age
+checkMinimumAge :: Integer -> Integer -> Comp ()
+checkMinimumAge today minimumAge = do
+  age <- inputField Private
+  let l = map fromInteger [today..minimumAge]
+    -- access elements of `l` directly
+  forM_ l $ \x -> do
+    assert (x `neq` age)
