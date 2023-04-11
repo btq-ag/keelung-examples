@@ -121,10 +121,10 @@ listComprehension m n = do
 -- | Your birthday is: 1996-12-09
 -- | => mininum age (in days) 9490
 -- | => age (in days) 9611
-checkMinimumAge :: Integer -> Integer -> Comp ()
-checkMinimumAge today minimumAge = do
+checkMinimumAge :: Integer -> Comp ()
+checkMinimumAge minimumAge = do
   age <- inputField Private
-  let l = map fromInteger [today..minimumAge]
+  let l = map fromInteger [0..minimumAge]
     -- access elements of `l` directly
   forM_ l $ \x -> do
     assert (x `neq` age)
