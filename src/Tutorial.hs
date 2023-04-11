@@ -63,18 +63,6 @@ summation = do
   xs <- inputList Public 10
   return $ sum xs
 
--- | Birthday voucher example
-birthday :: Comp Boolean
-birthday = do
-  -- these inputs are private witnesses
-  hiddenMonth <- inputField Private
-  hiddenDate <- inputField Private
-  -- these inputs are public inputs
-  month <- input Public
-  date <- input Public
-
-  return $ (hiddenMonth `eq` month) `And` (hiddenDate `eq` date)
-
 -- | A program that outputs the input to the 4th power (without computation reusing)
 notReused :: Comp [Field]
 notReused = do
@@ -99,7 +87,7 @@ verifyAge minAge = do
   return (andList (explode realAge (notAccept m)))
   where
     explode :: Field -> [Field] -> [Boolean]
-    explode realAge [] = []
+    explode _ [] = []
     explode realAge (f : fs) = (realAge `neq` f) : (explode realAge fs)
 
 andList :: [Boolean] -> Boolean
@@ -108,3 +96,22 @@ andList (b : bs) = b `And` (andList bs)
 
 notAccept :: Integer -> [Field]
 notAccept m = map fromInteger [0..m]
+
+{- LISTS -}
+-- | A program that returns whatever list of length l is given.
+echoList :: Int -> Comp [Field] 
+echoList l = do
+  xs <- inputList Private l :: Comp [Field]
+  return xs
+
+-- | A program that returns the nth index of a list of length l.
+indexList :: Int -> Int -> Comp Field
+indexList l n = do
+  xs <- inputList Private l :: Comp [Field]
+  return (xs !! n)
+
+-- | A program that reverses the input list of length l.
+reverseList :: Int -> Comp [Field]
+reverseList l = do
+  xs <- inputList Private l :: Comp [Field]
+  return (reverse xs)
