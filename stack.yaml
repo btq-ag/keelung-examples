@@ -45,9 +45,9 @@ extra-deps:
     commit: d7d0da6b5df8045afdfb820ba8d08f34dc4c3e58
   # - ../keelung
   - git: https://github.com/btq-ag/keelung.git
-    commit: 1e4f391a6b7d13a4805379c38ea85f4d7b5e827a
+    commit: 678e1988df56462015d52831f788353ec9230cac
   - git: https://github.com/btq-ag/keelung-stdlib.git
-    commit: 7757098b603c5d4c1f6b5ac4a191bd65b3c91b62
+    commit: e138b24b76923e3e2135785d4174616af41c571d
 # Override default flag values for local packages and extra-deps
 # flags: {}
 
