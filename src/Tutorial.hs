@@ -1,4 +1,5 @@
 {-# OPTIONS_GHC -Wno-unrecognised-pragmas #-}
+{-# LANGUAGE DataKinds #-}
 
 {-# HLINT ignore "Redundant return" #-}
 module Tutorial where
@@ -129,10 +130,7 @@ listComprehension m n = do
 -- | Your birthday is: 1996-12-09
 -- | => mininum age (in days) 9490
 -- | => age (in days) 9611
-checkMinimumAge :: Integer -> Comp ()
-checkMinimumAge minimumAge = do
-  age <- inputField Private
-  let l = map fromInteger [0..minimumAge]
-    -- access elements of `l` directly
-  forM_ l $ \x -> do
-    assert (x `neq` age)
+checkMinAge :: Integer -> Comp ()
+checkMinAge minimumAge = do
+  actualAge <- inputUInt Private :: Comp (UInt 16)
+  assertLTE age minimumAge
