@@ -78,26 +78,6 @@ reused = do
   y <- reuse $ x * x * x * x
   return [y, y]
 
--- | Take in the date as input
-verifyAge :: Integer -> Comp Boolean
-verifyAge minAge = do 
-  today <- inputField Public
-  birthday <- inputField Private
-  let realAge = today - birthday
-  let m = minAge * 365
-  return (andList (explode realAge (notAccept m)))
-  where
-    explode :: Field -> [Field] -> [Boolean]
-    explode _ [] = []
-    explode realAge (f : fs) = (realAge `neq` f) : (explode realAge fs)
-
-andList :: [Boolean] -> Boolean
-andList [] = Boolean True
-andList (b : bs) = b `And` (andList bs)
-
-notAccept :: Integer -> [Field]
-notAccept m = map fromInteger [0..m]
-
 {- LISTS -}
 -- | A program that returns whatever list of length l is given.
 echoList :: Int -> Comp [Field] 
