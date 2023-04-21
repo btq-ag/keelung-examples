@@ -114,4 +114,4 @@ listComprehension m n = do
 checkMinAge :: Integer -> Comp ()
 checkMinAge minimumAge = do
   actualAge <- inputUInt Private :: Comp (UInt 16)
-  assertLTE age minimumAge
+  assertLTE actualAge minimumAge
