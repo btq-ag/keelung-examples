@@ -2,6 +2,7 @@
 {-# LANGUAGE DataKinds #-}
 
 {-# HLINT ignore "Redundant return" #-}
+{-# LANGUAGE DataKinds #-}
 module Tutorial where
 
 import Control.Monad
@@ -113,5 +114,5 @@ listComprehension m n = do
 -- | => age (in days) 9611
 checkMinAge :: Integer -> Comp ()
 checkMinAge minimumAge = do
-  actualAge <- inputUInt Private :: Comp (UInt 16)
-  assertLTE actualAge minimumAge
+  actualAge <- inputUInt @16 Private
+  assertGTE actualAge minimumAge
