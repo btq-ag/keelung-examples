@@ -3,6 +3,7 @@
 
 {-# HLINT ignore "Redundant return" #-}
 {-# LANGUAGE DataKinds #-}
+{-# LANGUAGE TypeApplications #-}
 module Tutorial where
 
 import Control.Monad
