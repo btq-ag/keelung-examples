@@ -1,3 +1,4 @@
+{-# LANGUAGE DeriveGeneric #-}
 {-# OPTIONS_GHC -Wno-unrecognised-pragmas #-}
 
 {-# HLINT ignore "Use <$>" #-}
@@ -7,6 +8,7 @@ module MerkleTree where
 import Data.Foldable (foldlM)
 import Hash.Poseidon
 import Keelung
+import GHC.Generics
 
 mkTree :: [Field] -> Comp Field
 mkTree xs = do
@@ -47,29 +49,51 @@ choose :: [Field] -> Field -> Field
 choose [] _ = 0
 choose (x : xs) i = cond (i `eq` (4 - Integer (fromIntegral $ length xs))) x $ choose xs i
 
-data Tree a = Node (Tree a) (Tree a) a | Leaf a
+data Tree a = Node a (Tree a) (Tree a) | Leaf a
+  deriving (Generic, Show)
+
+instance (Encode a) => (Encode (Tree a))
 
 getRoot :: Tree a -> a
-getRoot (Node _ _ n) = n
+getRoot (Node n _ _) = n
 getRoot (Leaf n) = n
 
 type MerkleTree = Tree Field
+
+mkBTree :: [Field] -> Comp MerkleTree
+mkBTree xs = do
+  nodes <- mergeTrees (map Leaf xs, [])
+  case nodes of
+    Nothing -> error "Empty Tree"
+    Just t -> return t
+  where
+    -- Input:  "Unprocessed" trees and "Processed" trees
+    -- Output: "Unprocessed" subtrees or one result tree
+    mergeTrees :: ([MerkleTree], [MerkleTree]) -> Comp (Maybe MerkleTree)
+    mergeTrees ([], []) = return Nothing
+    mergeTrees ([t], []) = return $ Just t
+    mergeTrees ([t], ts) = mergeTrees ([], t : ts)
+    mergeTrees (t1 : t2 : ts', ts) = hash (map getRoot [t1, t2]) >>= \t -> mergeTrees (ts', Node t t1 t2 : ts)
+    mergeTrees ([], [t]) = return $ Just t
+    mergeTrees ([], ts) = mergeTrees (ts, [])
+
+
 
 data TaggedPair a = Fst a a | Snd a a
 
 type Path = [TaggedPair Field]
 
-dfs :: MerkleTree -> Comp (Maybe Path)
-dfs tree = do
-  leaf <- inputField Private
-  return $ dfs' tree leaf
-  where
-    dfs' :: MerkleTree -> Field -> Maybe Path
-    dfs' (Node t1 t2 node) n =
-      if node == n
-        then Just []
-        else case (dfs' t1 n, dfs' t2 n) of
-          (Nothing, Nothing) -> Nothing
-          (Just p, _) -> Just (Fst (getRoot t1) (getRoot t2) : p)
-          (_, Just p) -> Just (Snd (getRoot t1) (getRoot t2) : p)
-    dfs' (Leaf l) n = if l == n then Just [] else Nothing
+-- dfs :: MerkleTree -> Comp (Maybe Path)
+-- dfs tree = do
+--   leaf <- inputField Private
+--   return $ dfs' tree leaf
+--   where
+--     dfs' :: MerkleTree -> Field -> Maybe Path
+--     dfs' (Node t1 t2 node) n =
+--       if node == n
+--         then Just []
+--         else case (dfs' t1 n, dfs' t2 n) of
+--           (Nothing, Nothing) -> Nothing
+--           (Just p, _) -> Just (Fst (getRoot t1) (getRoot t2) : p)
+--           (_, Just p) -> Just (Snd (getRoot t1) (getRoot t2) : p)
+--     dfs' (Leaf l) n = if l == n then Just [] else Nothing

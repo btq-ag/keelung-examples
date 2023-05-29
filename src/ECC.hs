@@ -1,3 +1,5 @@
+-- This is a incomplete and buggy ECC implemetation, this only serves as
+-- a demostration of using tuples in Keelung.
 {-# LANGUAGE DataKinds #-}
 
 module ECC where
