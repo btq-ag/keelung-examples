@@ -7,11 +7,10 @@ import Keelung
 import MerkleTree
 import GHC.Generics
 
-data FieldTree = Leaf Field | Node Field FieldTree FieldTree
+data Enc a = A a | R (Enc a) a a
   deriving Generic
 
-checkTree :: Int -> Field -> Comp ()
-checkTree depth root = do
-  inputTree <- inputList Private depth
-  root' <- mkTree inputTree
-  assert (root `eq` root')
+instance Encode a => (Encode (Enc a))
+
+testEnc :: Enc a -> Comp (Enc a)
+testEnc = return
