@@ -9,6 +9,7 @@ import Data.Foldable (foldlM)
 import Hash.Poseidon
 import Keelung
 import GHC.Generics
+import Data.Maybe (fromMaybe)
 
 mkTree :: [Field] -> Comp Field
 mkTree xs = do
@@ -49,26 +50,25 @@ choose :: [Field] -> Field -> Field
 choose [] _ = 0
 choose (x : xs) i = cond (i `eq` (4 - Integer (fromIntegral $ length xs))) x $ choose xs i
 
+-- Custom datatype version making use of datatype-generic programming
 data Tree a = Node a (Tree a) (Tree a) | Leaf a
-  deriving (Generic, Show)
+  deriving Generic
 
 instance (Encode a) => (Encode (Tree a))
 
-getRoot :: Tree a -> a
-getRoot (Node n _ _) = n
-getRoot (Leaf n) = n
-
 type MerkleTree = Tree Field
+
+mkBTree' :: Comp MerkleTree
+mkBTree' = do
+  xs <- inputList Private 5
+  mkBTree xs
 
 mkBTree :: [Field] -> Comp MerkleTree
 mkBTree xs = do
   nodes <- mergeTrees (map Leaf xs, [])
-  case nodes of
-    Nothing -> error "Empty Tree"
-    Just t -> return t
+  return $ fromMaybe (error "Empty Tree") nodes
   where
     -- Input:  "Unprocessed" trees and "Processed" trees
-    -- Output: "Unprocessed" subtrees or one result tree
     mergeTrees :: ([MerkleTree], [MerkleTree]) -> Comp (Maybe MerkleTree)
     mergeTrees ([], []) = return Nothing
     mergeTrees ([t], []) = return $ Just t
@@ -77,12 +77,14 @@ mkBTree xs = do
     mergeTrees ([], [t]) = return $ Just t
     mergeTrees ([], ts) = mergeTrees (ts, [])
 
+getRoot :: Tree a -> a
+getRoot (Node n _ _) = n
+getRoot (Leaf n) = n
 
-
-data TaggedPair a = Fst a a | Snd a a
-
-type Path = [TaggedPair Field]
-
+-- data TaggedPair a = Fst a a | Snd a a
+-- 
+-- type Path = [TaggedPair Field]
+-- 
 -- dfs :: MerkleTree -> Comp (Maybe Path)
 -- dfs tree = do
 --   leaf <- inputField Private
