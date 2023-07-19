@@ -27,6 +27,7 @@ library
   exposed-modules:
       ECC
       GenericDemo
+      Kohei
       MerkleTree
       Semaphore
       Sudoku
