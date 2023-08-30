@@ -1,4 +1,5 @@
 {-# LANGUAGE DataKinds #-}
+
 module Sudoku where
 
 import Control.Monad
@@ -50,7 +51,8 @@ valid xs = do
 
 from0to9 :: UInt 4 -> Comp ()
 from0to9 x = assertLTE x 9
-    -- x `eq` 0 .|. x `eq` 1 .|. x `eq` 2 .|. x `eq` 3 .|. x `eq` 4 .|. x `eq` 5 .|. x `eq` 6 .|. x `eq` 7 .|. x `eq` 8 .|. x `eq` 9
+
+-- x `eq` 0 .|. x `eq` 1 .|. x `eq` 2 .|. x `eq` 3 .|. x `eq` 4 .|. x `eq` 5 .|. x `eq` 6 .|. x `eq` 7 .|. x `eq` 8 .|. x `eq` 9
 
 testProblem :: [Integer]
 testProblem =

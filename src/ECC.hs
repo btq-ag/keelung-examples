@@ -31,7 +31,7 @@ genPoint' n = do
   b <- inputField Private
   x <- inputField Private
   y <- inputField Private
-  genPoint n (Point ((a,b),x,y))
+  genPoint n (Point ((a, b), x, y))
 
 genPoint :: Int -> Point -> Comp (Field, Field)
 genPoint n (Point ((a, b), x, y)) = do

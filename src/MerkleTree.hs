@@ -6,10 +6,10 @@
 module MerkleTree where
 
 import Data.Foldable (foldlM)
+import Data.Maybe (fromMaybe)
+import GHC.Generics
 import Hash.Poseidon
 import Keelung
-import GHC.Generics
-import Data.Maybe (fromMaybe)
 
 mkTree :: [Field] -> Comp Field
 mkTree xs = do
@@ -38,9 +38,9 @@ getMerkleProof leaf siblings indices = do
 
 getMerkleProof' :: Int -> Comp Field
 getMerkleProof' depth = do
-  leaf     <- inputField Private
+  leaf <- inputField Private
   siblings <- inputList2 Private depth 2
-  indices  <- inputList Private depth :: Comp [Field]
+  indices <- inputList Private depth :: Comp [Field]
   foldlM
     (\_digest (_i, p) -> hash p >>= reuse)
     leaf
@@ -52,7 +52,7 @@ choose (x : xs) i = cond (i `eq` (4 - Integer (fromIntegral $ length xs))) x $ c
 
 -- Custom datatype version making use of datatype-generic programming
 data Tree a = Node a (Tree a) (Tree a) | Leaf a
-  deriving Generic
+  deriving (Generic)
 
 instance (Encode a) => (Encode (Tree a))
 
@@ -82,9 +82,9 @@ getRoot (Node n _ _) = n
 getRoot (Leaf n) = n
 
 -- data TaggedPair a = Fst a a | Snd a a
--- 
+--
 -- type Path = [TaggedPair Field]
--- 
+--
 -- dfs :: MerkleTree -> Comp (Maybe Path)
 -- dfs tree = do
 --   leaf <- inputField Private

@@ -3,12 +3,11 @@
 
 module GenericDemo where
 
-import Keelung
-import MerkleTree
 import GHC.Generics
+import Keelung
 
 data Enc a = A a | R (Enc a) a a
-  deriving Generic
+  deriving (Generic)
 
 instance Encode a => (Encode (Enc a))
 

@@ -1,9 +1,8 @@
-{-# OPTIONS_GHC -Wno-unrecognised-pragmas #-}
 {-# LANGUAGE DataKinds #-}
+{-# OPTIONS_GHC -Wno-unrecognised-pragmas #-}
 
 {-# HLINT ignore "Redundant return" #-}
-{-# LANGUAGE DataKinds #-}
-{-# LANGUAGE TypeApplications #-}
+
 module Tutorial where
 
 import Control.Monad
@@ -15,105 +14,97 @@ echo = do
   x <- input Private -- request for a private input and bind it to 'x'
   return x -- return 'x'
 
--- | A program that requests for 2 inputs and does nothing with them
-useless :: Comp ()
-useless = do
-  _x <- inputField Public -- request for a public input and bind it to 'x'
-  _y <- inputField Private -- request for a private input and bind it to 'y'
-  return ()
+-- | A program that requests for 2 inputs and add them together
+add :: Comp Field
+add = do
+  x <- input Public -- request for a public input and bind it to 'x'
+  y <- input Private -- request for a private input and bind it to 'y'
+  return (x + y)
 
--- | A program that expects the second input to be the square of the first input
-square :: Comp ()
-square = do
-  x <- inputField Public -- request for a public input and bind it to 'x'
-  y <- inputField Private -- request for a private input and bind it to 'y'
-  assert ((x * x) `eq` y) -- assert that 'y' equals to 'x' squared
+-- | Crunch some numbers
+arithmetics :: Comp Field
+arithmetics = do
+  x <- input Public :: Comp Field
+  y <- input Private
+  let temp = x * (3 - y)
+  return (temp * temp + 42)
 
--- | A stupid calculator has only 2 operations: addition and multiplication.
---   It takes an Boolean operation flag and 2 inputs, and returns the result.
-calculator :: Comp Field
-calculator = do
-  addOrMultiply <- inputBool Public
-  x <- inputField Public
-  y <- inputField Public
+-- | A program that requests for 2 Boolean inputs and returns the conjunction of them
+conjunct :: Comp Boolean
+conjunct = do
+  x <- input Public
+  y <- input Private
+  return (x .&. y)
 
+-- | A program that requests for 2 Field inputs and see if they are equal
+equalField :: Comp Boolean
+equalField = do
+  x <- inputField Private
+  y <- inputField Private
+  return (x `eq` y)
+
+-- | A program that asserts 2 Field inputs to be equal
+assertEqualField :: Comp ()
+assertEqualField = do
+  x <- inputField Private
+  y <- inputField Private
+  assert (x `eq` y)
+
+-- | Returns either the first Field or the second Field base on the Boolean
+choose :: Comp Field
+choose = do
+  xOrY <- input Public
+  x <- input Public
+  y <- input Public
   return $
     cond
-      addOrMultiply
-      (x + y)
-      (x * y)
+      xOrY -- predicate
+      x -- then branch
+      y -- else branch
 
--- | A program that requests for 10 inputs and returns the 4th input
-fourthInput :: Comp Field
-fourthInput = do
-  xs <- inputList Public 10          -- ask for 10 inputs 
-  return (xs !! 3)
+-- | Request for 4 public inputs
+get4Field :: Comp [Field]
+get4Field = do
+  x0 <- input Public
+  x1 <- input Public
+  x2 <- input Public
+  x3 <- input Public
+  return [x0, x1, x2, x3]
+
+-- | Request for 8 public inputs
+get8Field :: Comp [Field]
+get8Field = replicateM 8 (input Public)
+
+-- | Request for 10 public inputs
+get10Field :: Comp [Field]
+get10Field = inputList Public 10
 
 -- | A program that asserts all 10 inputs to be 42
 allBe42 :: Comp ()
 allBe42 = do
-  xs <- inputList Public 10 :: Comp [Field]
+  xs <- inputList Public 4 :: Comp [Field]
   -- access elements of `xs` with indices from 0 to 9
-  forM_ [0 .. 9] $ \i -> do
+  forM_ [0 .. 3] $ \i -> do
     assert (xs !! i `eq` 42)
   -- access elements of `xs` directly
   forM_ xs $ \x -> do
     assert (x `eq` 42)
 
--- | A program that sums all the 10 inputs
-summation :: Comp Field
-summation = do
-  xs <- inputList Public 10
-  return $ sum xs
+-- | Request for 4 public inputs and sum them up
+sumOf4Fields :: Comp Field
+sumOf4Fields = do
+  xs <- inputList Public 4
+  return (sum xs)
 
--- | A program that outputs the input to the 4th power (without computation reusing)
-notReused :: Comp [Field]
-notReused = do
-  x <- input Public
-  let y = x * x * x * x
-  return [y, y]
+-- | Request for a certain number of public inputs and sum them up
+sumOfFields :: Int -> Comp Field
+sumOfFields n = do
+  xs <- inputList Public n
+  return (sum xs)
 
--- | A program that outputs the input to the 4th power (with computation reusing)
-reused :: Comp [Field]
-reused = do
-  x <- input Public
-  y <- reuse $ x * x * x * x
-  return [y, y]
-
-{- LISTS -}
--- | A program that returns whatever list of length l is given.
-echoList :: Int -> Comp [Field] 
-echoList l = do
-  xs <- inputList Private l :: Comp [Field]
-  return xs
-
--- | A program that returns the nth index of a list of length l.
-indexList :: Int -> Int -> Comp Field
-indexList l n = do
-  xs <- inputList Private l :: Comp [Field]
-  return (xs !! n)
-
--- | A program that reverses the input list of length l.
-reverseList :: Int -> Comp [Field]
-reverseList l = do
-  xs <- inputList Private l :: Comp [Field]
-  return (reverse xs)
-
--- | Create a list using list comprehension
-listComprehension :: Integer -> Integer -> Comp [Field]
-listComprehension m n = do
-  let l = map fromInteger [m..n]
-  return l
-
-{- MISCELLANEOUS -}
--- | Prove a person is older than a minimum age
--- | E.g. parameters generated by Python script 
--- | ['bday.py', '26', '1996-12-09']
--- | Prove you are older than: 26
--- | Your birthday is: 1996-12-09
--- | => mininum age (in days) 9490
--- | => age (in days) 9611
-checkMinAge :: Integer -> Comp ()
-checkMinAge minimumAge = do
-  actualAge <- inputUInt @16 Private
-  assertGTE actualAge minimumAge
+-- | `caller` intantiates `sumOfFields` with different numbers
+caller :: Comp Field
+caller = do
+  sum1 <- sumOfFields 2
+  sum2 <- sumOfFields 3
+  return (sum1 + sum2)
