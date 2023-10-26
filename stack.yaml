@@ -44,9 +44,9 @@ extra-deps:
   - git: https://github.com/btq-ag/galois-field.git
     commit: d7d0da6b5df8045afdfb820ba8d08f34dc4c3e58
   - git: https://github.com/btq-ag/keelung.git
-    commit: 8856a21477eaf252827746b41c5366979123b6c6
+    commit: 8d8c21b0fd926f57de50f86a3fe7214acf9f38f6
   - git: https://github.com/btq-ag/keelung-stdlib.git
-    commit: 9edef6a354af84ce168b57240d808c7217590b1f
+    commit: 46e3a45c160f4ff53c22f55d04b9f10683efff62
 
 # Override default flag values for local packages and extra-deps
 # flags: {}
