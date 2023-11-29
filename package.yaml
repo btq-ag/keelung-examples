@@ -36,3 +36,24 @@ ghc-options:
 
 library:
   source-dirs: src
+
+tests:
+  keelung-examples-test:
+    main: Main.hs
+    source-dirs:
+      - test/
+      - src/
+    dependencies:
+      - keelung
+      # - keelung-examples
+      - hspec
+      - hspec-expectations-lifted
+      - HUnit
+      - QuickCheck
+      - quickcheck-transformer
+      - process
+
+    ghc-options:
+      - -Wall
+      - -Werror=incomplete-patterns
+      - -fno-warn-orphans
