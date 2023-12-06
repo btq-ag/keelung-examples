@@ -8,11 +8,11 @@ source-repository-package
 source-repository-package
     type: git
     location: https://github.com/btq-ag/keelung.git
-    tag: 7a6f43a3b01e625e4cf08022a699b39f59fa695f
+    tag: 7273d3970d0d60416f6b76ccbb7bac75164ff795
 
 source-repository-package
     type: git
     location: https://github.com/btq-ag/keelung-stdlib.git
-    tag: ac643b66b8a6662e6d5fd1386a90865a89bd95e8
+    tag: d06c557da696e52f937713573694ed0e0a521013
 
-with-compiler: ghc-9.2.5
+with-compiler: ghc-9.2.8
