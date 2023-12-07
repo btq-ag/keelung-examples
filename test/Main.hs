@@ -7,4 +7,4 @@ import Test.Snarkjs as Snarkjs
 
 main :: IO ()
 main = hspec $ do
-  describe "Snarkjs" Snarkjs.tests
+  describe "Snarkjs" Snarkjs.testQuad

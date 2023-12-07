@@ -27,6 +27,7 @@ library
   exposed-modules:
       ECC
       GenericDemo
+      LogicGates
       MerkleTree
       Quad
       Semaphore
@@ -51,6 +52,7 @@ test-suite keelung-examples-test
       Test.Snarkjs
       ECC
       GenericDemo
+      LogicGates
       MerkleTree
       Quad
       Semaphore

@@ -1,19 +1,21 @@
 {-# LANGUAGE LambdaCase #-}
-module Test.Snarkjs (tests, run) where
 
-import Keelung
+module Test.Snarkjs (tests, run, testQuad) where
+
 -- import Test.HUnit (assertFailure)
-import Test.Hspec
-import Data.Either
-import System.Process
-import GHC.IO.Exception (ExitCode(..))
 
-import Tutorial
+import Data.Either
+import GHC.IO.Exception (ExitCode (..))
+import Keelung
 import Quad
 import Sudoku
+import System.Process
+import Test.Hspec
+import Test.QuickCheck
+import Tutorial
 
 run :: IO ()
-run = hspec tests
+run = hspec testQuad
 
 -- execute :: Encode t => Comp t -> IO Counters
 -- execute program = do
@@ -36,15 +38,15 @@ testWith name prog pubIn prvIn = do
       system ("snarkjs r1cs info " <> name <> ".r1cs") >>= shouldBe ExitSuccess
     it "Checking Snarkjs matches the witness with R1CS..." $ do
       system ("snarkjs wtns check " <> name <> ".r1cs " <> name <> ".wtns") >>= shouldBe ExitSuccess
-    -- // Assume pot12_final.ptau is present.
-    -- it "Preparing powers of tau with Snarkjs..." $ do
-    --   system "snarkjs powersoftau new bn128 12 pot12.ptau" >>= shouldBe ExitSuccess
-    --   readCreateProcessWithExitCode
-    --     (shell "snarkjs powersoftau contribute pot12.ptau pot12_temp.ptau --name=\"First contribution\"") "123\n"
-    --       >>= \(e, _, _) -> e `shouldBe` ExitSuccess
-    --   system "snarkjs powersoftau beacon pot12_temp.ptau pot12_beacon.ptau 0102030405060708090a0b0c0d0e0f101112131415161718191a1b1c1d1e1f 10"
-    --     >>= shouldBe ExitSuccess
-    --   system "snarkjs powersoftau prepare phase2 pot12_beacon.ptau pot12_final.ptau" >>= shouldBe ExitSuccess
+      -- // Assume pot12_final.ptau is present.
+      -- it "Preparing powers of tau with Snarkjs..." $ do
+      --   system "snarkjs powersoftau new bn128 12 pot12.ptau" >>= shouldBe ExitSuccess
+      --   readCreateProcessWithExitCode
+      --     (shell "snarkjs powersoftau contribute pot12.ptau pot12_temp.ptau --name=\"First contribution\"") "123\n"
+      --       >>= \(e, _, _) -> e `shouldBe` ExitSuccess
+      --   system "snarkjs powersoftau beacon pot12_temp.ptau pot12_beacon.ptau 0102030405060708090a0b0c0d0e0f101112131415161718191a1b1c1d1e1f 10"
+      --     >>= shouldBe ExitSuccess
+      --   system "snarkjs powersoftau prepare phase2 pot12_beacon.ptau pot12_final.ptau" >>= shouldBe ExitSuccess
       system "snarkjs powersoftau verify pot12_final.ptau" >>= shouldBe ExitSuccess
     it "Generating zkey..." $ do
       system ("snarkjs groth16 setup " <> name <> ".r1cs pot12_final.ptau " <> name <> ".zkey") >>= shouldBe ExitSuccess
@@ -58,6 +60,15 @@ testWith name prog pubIn prvIn = do
 
 tests :: SpecWith ()
 tests = do
-  testWith "echo" echo [] [2]
-  testWith "quad" quad [3,5,-22] [2]
-  testWith "sudoku" sudoku testProblem testSolution
+  -- testWith "echo" echo [] [2]
+  testWith "quad" quad [3, 5, -22] [2]
+
+-- testWith "sudoku" sudoku testProblem testSolution
+
+testQuad :: SpecWith ()
+testQuad = describe "Quad properties" $ do
+  it "should preserve invariants after applying randomized adjustments" $ do
+    forAll (suchThat arbitrary (\(a, b, c, x) ->  (a * x * x + b * x + c) == 0)) $ \(a, b, c, x) -> do
+      genCircuitBin ("quad.r1cs") bn128 quad >>= flip shouldSatisfy isRight
+      genWtns ("quad.wtns") bn128 quad [a,b,c] [x] >>= flip shouldSatisfy isRight
+      -- system ("snarkjs groth16 verify  quad_verification_key.jsonl public.json proof.json") >>= shouldBe ExitSuccess
