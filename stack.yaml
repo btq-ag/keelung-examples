@@ -17,8 +17,7 @@
 #
 # resolver: ./custom-snapshot.yaml
 # resolver: https://example.com/snapshots/2018-01-01.yaml
-resolver:
-  url: https://raw.githubusercontent.com/commercialhaskell/stackage-snapshots/master/lts/20/26.yaml
+resolver: lts-20.26
 
 # User packages to be built.
 # Various formats can be used as shown in the example below.
@@ -44,9 +43,10 @@ extra-deps:
   - git: https://github.com/btq-ag/galois-field.git
     commit: d7d0da6b5df8045afdfb820ba8d08f34dc4c3e58
   - git: https://github.com/btq-ag/keelung.git
-    commit: 7273d3970d0d60416f6b76ccbb7bac75164ff795
-  - git: https://github.com/btq-ag/keelung-stdlib.git
-    commit: d06c557da696e52f937713573694ed0e0a521013
+    commit: bd84a701399f32dba120f317c0783f1191941b83
+  - ../keelung-stdlib
+      #   - git: https://github.com/btq-ag/keelung-stdlib.git
+      #     commit: 500024c57edab1dca52fdc6160b684029a6e9cb7
 
 # Override default flag values for local packages and extra-deps
 # flags: {}
