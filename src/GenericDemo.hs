@@ -26,13 +26,19 @@ testMaybe = do dividend <- inputUInt Public :: Comp (UInt 8)
                else
                  Just <$> performDivMod dividend divisor
 
-data ComplexData = Com (Pub Boolean, Prv Field) (Prv Field)
-  deriving (Generic)
+-- Test dataype and generic inputs
 
-instance (Inputable ComplexData)
-instance (Encode ComplexData)
+data Person = Person (UInt 8) Boolean deriving Generic
 
-inputComplexData :: Comp (Boolean, Field)
-inputComplexData = do
-    Com (b, f1) _ <- input' :: Comp ComplexData
-    return (getVar b, getVar f1)
+instance Encodeable Person where
+
+-- data ComplexData = Com (Pub Boolean, Prv Field) (Prv Field)
+--   deriving (Generic)
+-- 
+-- instance (Inputable ComplexData)
+-- instance (Encode ComplexData)
+-- 
+-- inputComplexData :: Comp (Boolean, Field)
+-- inputComplexData = do
+--     Com (b, f1) _ <- input' :: Comp ComplexData
+--     return (getVar b, getVar f1)
