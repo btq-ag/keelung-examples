@@ -30,15 +30,9 @@ testMaybe = do dividend <- inputUInt Public :: Comp (UInt 8)
 
 data Person = Person (UInt 8) Boolean deriving Generic
 
-instance Encodeable Person where
+instance Inputable Person where
 
--- data ComplexData = Com (Pub Boolean, Prv Field) (Prv Field)
---   deriving (Generic)
--- 
--- instance (Inputable ComplexData)
--- instance (Encode ComplexData)
--- 
--- inputComplexData :: Comp (Boolean, Field)
--- inputComplexData = do
---     Com (b, f1) _ <- input' :: Comp ComplexData
---     return (getVar b, getVar f1)
+testPerson :: Comp ()
+testPerson = do p <- inputData Public :: Comp Person
+                case p of
+                  Person _ b -> assert (b `eq` (Boolean True))
