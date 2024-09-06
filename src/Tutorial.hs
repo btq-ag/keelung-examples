@@ -1,4 +1,6 @@
 {-# LANGUAGE DataKinds #-}
+{-# LANGUAGE DeriveGeneric #-}
+
 {-# OPTIONS_GHC -Wno-unrecognised-pragmas #-}
 
 {-# HLINT ignore "Redundant return" #-}
@@ -7,6 +9,7 @@ module Tutorial where
 
 import Control.Monad
 import Keelung
+import GHC.Generics (Generic)
 
 -- | A program that outputs whatever number is given.
 echo :: Comp Field
@@ -108,3 +111,8 @@ caller = do
   sum1 <- sumOfFields 2
   sum2 <- sumOfFields 3
   return (sum1 + sum2)
+
+newtype KEither a b = KEither (a, b)
+  deriving (Generic)
+
+instance (Encode a, Encode b) => (Encode (KEither a b))
