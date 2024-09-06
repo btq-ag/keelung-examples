@@ -44,9 +44,9 @@ genPoint n (Point ((a, b), x, y)) = do
     times point number = do
       if even number
         then (point `times` (number `div` 2)) >>= reuse >>= \p -> return $ double p
-        else (point `times` pred number) >>= reuse >>= \p -> return $ p `add` point
-    add :: Point -> Point -> Point
-    add p0@(Point (ec, x0, y0)) p1@(Point (_, x1, y1))
+        else (point `times` pred number) >>= reuse >>= \p -> return $ p `addP` point
+    addP :: Point -> Point -> Point
+    addP p0@(Point (ec, x0, y0)) p1@(Point (_, x1, y1))
       | p0 == p1 = double p0
       | x0 == x1 = Point (ec, 0, 0)
       | otherwise = Point (ec, x2, y2)
